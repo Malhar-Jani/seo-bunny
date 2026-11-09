@@ -1,0 +1,591 @@
+@import "tailwindcss";
+
+@theme {
+  /* Warm Vanilla & Espresso Cream Neutrals */
+  --color-white: #fffefb;
+  --color-gray-50: #fdfbf7;
+  --color-gray-100: #f5efe6;
+  --color-gray-200: #e8dfd1;
+  --color-gray-300: #d6c8b4;
+  --color-gray-400: #a69680;
+  --color-gray-500: #7c6d5a;
+  --color-gray-600: #5e5141;
+  --color-gray-700: #463c2f;
+  --color-gray-800: #30281f;
+  --color-gray-900: #211b14;
+  --color-gray-950: #14100c;
+
+  --color-slate-50: #fdfbf7;
+  --color-slate-100: #f5efe6;
+  --color-slate-200: #e8dfd1;
+  --color-slate-300: #d6c8b4;
+  --color-slate-400: #a69680;
+  --color-slate-500: #7c6d5a;
+  --color-slate-600: #5e5141;
+  --color-slate-700: #463c2f;
+  --color-slate-800: #30281f;
+  --color-slate-900: #211b14;
+  --color-slate-950: #14100c;
+
+  --color-zinc-50: #fdfbf7;
+  --color-zinc-100: #f5efe6;
+  --color-zinc-200: #e8dfd1;
+  --color-zinc-300: #d6c8b4;
+  --color-zinc-400: #a69680;
+  --color-zinc-500: #7c6d5a;
+  --color-zinc-600: #5e5141;
+  --color-zinc-700: #463c2f;
+  --color-zinc-800: #30281f;
+  --color-zinc-900: #211b14;
+  --color-zinc-950: #14100c;
+
+  --color-neutral-50: #fdfbf7;
+  --color-neutral-100: #f5efe6;
+  --color-neutral-200: #e8dfd1;
+  --color-neutral-300: #d6c8b4;
+  --color-neutral-400: #a69680;
+  --color-neutral-500: #7c6d5a;
+  --color-neutral-600: #5e5141;
+  --color-neutral-700: #463c2f;
+  --color-neutral-800: #30281f;
+  --color-neutral-900: #211b14;
+  --color-neutral-950: #14100c;
+
+  --color-stone-50: #fdfbf7;
+  --color-stone-100: #f5efe6;
+  --color-stone-200: #e8dfd1;
+  --color-stone-300: #d6c8b4;
+  --color-stone-400: #a69680;
+  --color-stone-500: #7c6d5a;
+  --color-stone-600: #5e5141;
+  --color-stone-700: #463c2f;
+  --color-stone-800: #30281f;
+  --color-stone-900: #211b14;
+  --color-stone-950: #14100c;
+
+  /* Primary Brand: Warm Terracotta & Cinnamon Cream (mapped to blue utilities) */
+  --color-blue-50: #fdf4ef;
+  --color-blue-100: #fae6db;
+  --color-blue-200: #f4cbb6;
+  --color-blue-300: #eba788;
+  --color-blue-400: #df7f57;
+  --color-blue-500: #d1643a;
+  --color-blue-600: #c25430;
+  --color-blue-700: #a24123;
+  --color-blue-800: #833620;
+  --color-blue-900: #6b2f1e;
+  --color-blue-950: #3a160d;
+
+  /* Secondary Brand: Warm Espresso-Plum (indigo) */
+  --color-indigo-50: #f9f3f5;
+  --color-indigo-100: #f2e6eb;
+  --color-indigo-200: #e4cdd7;
+  --color-indigo-300: #cfa8b9;
+  --color-indigo-400: #b47e96;
+  --color-indigo-500: #995d77;
+  --color-indigo-600: #7f475f;
+  --color-indigo-700: #69394d;
+  --color-indigo-800: #583141;
+  --color-indigo-900: #4b2c39;
+  --color-indigo-950: #2b161f;
+
+  /* Cool Contrast in Warm Harmony: Eucalyptus & Seafoam Teal (sky / cyan / teal) */
+  --color-sky-50: #f1f8f7;
+  --color-sky-100: #dcefeb;
+  --color-sky-200: #bce0d9;
+  --color-sky-300: #90c8bf;
+  --color-sky-400: #64aca1;
+  --color-sky-500: #489086;
+  --color-sky-600: #37746c;
+  --color-sky-700: #2f5e58;
+  --color-sky-800: #294c48;
+  --color-sky-900: #25403d;
+  --color-sky-950: #122422;
+
+  --color-cyan-50: #f1f8f7;
+  --color-cyan-100: #dcefeb;
+  --color-cyan-200: #bce0d9;
+  --color-cyan-300: #90c8bf;
+  --color-cyan-400: #64aca1;
+  --color-cyan-500: #489086;
+  --color-cyan-600: #37746c;
+  --color-cyan-700: #2f5e58;
+  --color-cyan-800: #294c48;
+  --color-cyan-900: #25403d;
+  --color-cyan-950: #122422;
+
+  --color-teal-50: #f1f8f7;
+  --color-teal-100: #dcefeb;
+  --color-teal-200: #bce0d9;
+  --color-teal-300: #90c8bf;
+  --color-teal-400: #64aca1;
+  --color-teal-500: #489086;
+  --color-teal-600: #37746c;
+  --color-teal-700: #2f5e58;
+  --color-teal-800: #294c48;
+  --color-teal-900: #25403d;
+  --color-teal-950: #122422;
+
+  /* Berry & Dusty Rose Accents (purple / violet / fuchsia / pink) */
+  --color-purple-50: #fbf4f6;
+  --color-purple-100: #f6e7ec;
+  --color-purple-200: #eed2dc;
+  --color-purple-300: #e0afc0;
+  --color-purple-400: #cc829c;
+  --color-purple-500: #b55e7d;
+  --color-purple-600: #9c4664;
+  --color-purple-700: #823751;
+  --color-purple-800: #6d3045;
+  --color-purple-900: #5c2c3d;
+  --color-purple-950: #351520;
+
+  --color-violet-50: #fbf4f6;
+  --color-violet-100: #f6e7ec;
+  --color-violet-200: #eed2dc;
+  --color-violet-300: #e0afc0;
+  --color-violet-400: #cc829c;
+  --color-violet-500: #b55e7d;
+  --color-violet-600: #9c4664;
+  --color-violet-700: #823751;
+  --color-violet-800: #6d3045;
+  --color-violet-900: #5c2c3d;
+  --color-violet-950: #351520;
+
+  --color-fuchsia-50: #fbf4f6;
+  --color-fuchsia-100: #f6e7ec;
+  --color-fuchsia-200: #eed2dc;
+  --color-fuchsia-300: #e0afc0;
+  --color-fuchsia-400: #cc829c;
+  --color-fuchsia-500: #b55e7d;
+  --color-fuchsia-600: #9c4664;
+  --color-fuchsia-700: #823751;
+  --color-fuchsia-800: #6d3045;
+  --color-fuchsia-900: #5c2c3d;
+  --color-fuchsia-950: #351520;
+
+  --color-pink-50: #fbf4f6;
+  --color-pink-100: #f6e7ec;
+  --color-pink-200: #eed2dc;
+  --color-pink-300: #e0afc0;
+  --color-pink-400: #cc829c;
+  --color-pink-500: #b55e7d;
+  --color-pink-600: #9c4664;
+  --color-pink-700: #823751;
+  --color-pink-800: #6d3045;
+  --color-pink-900: #5c2c3d;
+  --color-pink-950: #351520;
+
+  /* Positive / Rank 1-3: Botanical Matcha & Sage Green (green / emerald) */
+  --color-green-50: #f1f8f3;
+  --color-green-100: #deefe3;
+  --color-green-200: #bfe0c9;
+  --color-green-300: #93c8a5;
+  --color-green-400: #63aa7c;
+  --color-green-500: #438d5e;
+  --color-green-600: #327149;
+  --color-green-700: #295a3c;
+  --color-green-800: #244832;
+  --color-green-900: #1f3c2a;
+  --color-green-950: #102117;
+
+  --color-emerald-50: #f1f8f3;
+  --color-emerald-100: #deefe3;
+  --color-emerald-200: #bfe0c9;
+  --color-emerald-300: #93c8a5;
+  --color-emerald-400: #63aa7c;
+  --color-emerald-500: #438d5e;
+  --color-emerald-600: #327149;
+  --color-emerald-700: #295a3c;
+  --color-emerald-800: #244832;
+  --color-emerald-900: #1f3c2a;
+  --color-emerald-950: #102117;
+
+  /* Danger / Alert: Spiced Crimson Berry (red / rose) */
+  --color-red-50: #fdf3f2;
+  --color-red-100: #fbe4e2;
+  --color-red-200: #f7cdca;
+  --color-red-300: #efa9a4;
+  --color-red-400: #e27870;
+  --color-red-500: #d15147;
+  --color-red-600: #bc3b31;
+  --color-red-700: #9d2f27;
+  --color-red-800: #822a24;
+  --color-red-900: #6d2823;
+  --color-red-950: #3b110e;
+
+  --color-rose-50: #fdf3f2;
+  --color-rose-100: #fbe4e2;
+  --color-rose-200: #f7cdca;
+  --color-rose-300: #efa9a4;
+  --color-rose-400: #e27870;
+  --color-rose-500: #d15147;
+  --color-rose-600: #bc3b31;
+  --color-rose-700: #9d2f27;
+  --color-rose-800: #822a24;
+  --color-rose-900: #6d2823;
+  --color-rose-950: #3b110e;
+
+  /* Warning / Rank 4-10: Warm Honey & Amber Gold (amber / yellow / orange) */
+  --color-amber-50: #fdf8ed;
+  --color-amber-100: #faeccf;
+  --color-amber-200: #f4d69d;
+  --color-amber-300: #edba64;
+  --color-amber-400: #e59e38;
+  --color-amber-500: #d68220;
+  --color-amber-600: #b96518;
+  --color-amber-700: #964b17;
+  --color-amber-800: #7b3c19;
+  --color-amber-900: #663318;
+  --color-amber-950: #3a190a;
+
+  --color-yellow-50: #fdf8ed;
+  --color-yellow-100: #faeccf;
+  --color-yellow-200: #f4d69d;
+  --color-yellow-300: #edba64;
+  --color-yellow-400: #e59e38;
+  --color-yellow-500: #d68220;
+  --color-yellow-600: #b96518;
+  --color-yellow-700: #964b17;
+  --color-yellow-800: #7b3c19;
+  --color-yellow-900: #663318;
+  --color-yellow-950: #3a190a;
+
+  --color-orange-50: #fdf8ed;
+  --color-orange-100: #faeccf;
+  --color-orange-200: #f4d69d;
+  --color-orange-300: #edba64;
+  --color-orange-400: #e59e38;
+  --color-orange-500: #d68220;
+  --color-orange-600: #b96518;
+  --color-orange-700: #964b17;
+  --color-orange-800: #7b3c19;
+  --color-orange-900: #663318;
+  --color-orange-950: #3a190a;
+}
+
+:root {
+  --background: 38 50% 98%;
+  --foreground: 32 25% 10%;
+  --card: 42 100% 99.5%;
+  --card-foreground: 32 25% 10%;
+  --popover: 42 100% 99.5%;
+  --popover-foreground: 32 25% 10%;
+  --primary: 15 60% 47%;
+  --primary-foreground: 42 100% 99%;
+  --secondary: 36 38% 93%;
+  --secondary-foreground: 32 25% 14%;
+  --muted: 36 38% 93%;
+  --muted-foreground: 33 16% 42%;
+  --accent: 18 76% 92%;
+  --accent-foreground: 15 64% 32%;
+  --destructive: 4 58% 46%;
+  --destructive-foreground: 42 100% 99%;
+  --border: 36 29% 86%;
+  --input: 36 29% 86%;
+  --ring: 15 60% 47%;
+  --radius: 0.9rem;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(ellipse at top right, #faefe3 0%, #fdfbf7 55%, #f8f3ea 100%);
+  background-attachment: fixed;
+  color: #211b14;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+}
+
+* {
+  border-color: #e8dfd1;
+}
+
+::selection {
+  background: #f4cbb6;
+  color: #3a160d;
+}
+
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:not(:disabled), summary {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 2px solid #c25430;
+  outline-offset: 3px;
+}
+
+.sidebar-bg {
+  background: linear-gradient(180deg, #f7f1e7 0%, #f2eadd 100%);
+  border-right: 1px solid #e4d9c8;
+  box-shadow: 4px 0 24px -12px rgba(48, 40, 31, 0.06);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #efb89e;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fdeee6 0%, #f9dacb 100%);
+  color: #a24123;
+  box-shadow: 0 2px 8px -2px rgba(194, 84, 48, 0.18);
+}
+
+.surface {
+  background: #fffefb;
+  border: 1px solid #e8dfd1;
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 8px;
+}
+
+.page-heading h1 {
+  font-size: 1.85rem;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  line-height: 1.18;
+  color: #211b14;
+}
+
+.eyebrow {
+  color: #a24123;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.page-description {
+  color: #6e5f4d;
+  font-size: 14px;
+  line-height: 1.65;
+  margin-top: 10px;
+  max-width: 620px;
+}
+
+.heading-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fdeee6 0%, #f7dfd2 100%);
+  color: #c25430;
+  border: 1px solid #f2c7b3;
+  flex-shrink: 0;
+}
+
+.primary-button, .secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 17px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.primary-button {
+  background: linear-gradient(180deg, #cf5d38 0%, #bc4b27 100%);
+  color: #fffefb;
+  border: 1px solid #a84120;
+  box-shadow: 0 2px 8px -2px rgba(194, 84, 48, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.primary-button:hover {
+  background: linear-gradient(180deg, #bc4b27 0%, #9e3d1e 100%);
+  border-color: #8f3619;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgba(194, 84, 48, 0.42);
+}
+
+.secondary-button {
+  background: #fffefb;
+  color: #463c2f;
+  border: 1px solid #d6c8b4;
+  box-shadow: 0 1px 2px rgba(48, 40, 31, 0.04);
+}
+
+.secondary-button:hover {
+  background: #f5efe6;
+  border-color: #c4b39b;
+}
+
+.field {
+  border: 1px solid #d6c8b4;
+  background: #fffefb;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 13px;
+  color: #211b14;
+  min-height: 42px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field:focus {
+  border-color: #c25430;
+  box-shadow: 0 0 0 3px rgba(194, 84, 48, 0.12);
+  outline: none;
+}
+
+.field::placeholder {
+  color: #a69680;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.card-shadow {
+  box-shadow: 0 4px 14px -4px rgba(48, 40, 31, 0.06);
+}
+
+.card-hover:hover {
+  border-color: #d6c8b4;
+  box-shadow: 0 8px 24px -6px rgba(48, 40, 31, 0.09);
+}
+
+.table-header {
+  background: #f5efe6;
+  color: #7c6d5a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.table-row {
+  border-bottom: 1px solid #e8dfd1;
+}
+
+.table-row:hover {
+  background: #fdfbf7;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(33, 27, 20, 0.12);
+  padding: 0;
+  overflow: hidden;
+  background: #fffefb;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 12px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d6c8b4;
+  border-radius: 10px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.app-main {
+  min-width: 0;
+}
+
+.app-main table {
+  width: 100%;
+}
+
+.app-main [class*='shadow-'] {
+  --tw-shadow-color: rgba(48, 40, 31, 0.06);
+}
+
+@media (max-width: 767px) {
+  .page-heading {
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .heading-icon {
+    display: none;
+  }
+  .app-main {
+    overflow-x: clip;
+  }
+  .app-main .min-w-\[800px\] {
+    min-width: 700px;
+  }
+  .app-main .grid {
+    min-width: 0;
+  }
+  .app-main input, .app-main select {
+    max-width: 100%;
+  }
+  .app-main [class*='overflow-x-auto'] {
+    max-width: 100%;
+  }
+  .app-main .p-8 {
+    padding: 1rem;
+  }
+  .app-main .p-12 {
+    padding: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+input[type="checkbox"], input[type="radio"] {
+  accent-color: #c25430;
+}
+
+@media print {
+  body:has(.growth-page) * {
+    visibility: hidden;
+  }
+  body:has(.growth-page) .review-print-card,
+  body:has(.growth-page) .review-print-card * {
+    visibility: visible;
+  }
+  body:has(.growth-page) .review-print-card {
+    position: absolute;
+    left: 10%;
+    top: 6%;
+    width: 80%;
+    border: 1px solid #d6c8b4;
+    box-shadow: none;
+  }
+}

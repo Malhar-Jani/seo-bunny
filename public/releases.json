@@ -1,0 +1,82 @@
+[
+    {
+        "version": "1.6.1",
+        "date": "2026-02-27",
+        "title": "Address Resolver Reliability Patch",
+        "changes": [
+            "Fixed 'Location unknown' errors during address resolution.",
+            "Backend API Proxy: Requests are routed through a dedicated local proxy to bypass strict browser CORS policies.",
+            "Enforced a precise server-side 1.5-second processing queue per Nominatim's OpenStreetMap usage terms."
+        ]
+    },
+    {
+        "version": "1.6.0",
+        "date": "2026-02-27",
+        "title": "Grid Status Enhancements",
+        "changes": [
+            "Interactive Grid Status List: Miniature map component for every grid anchor location without performance drops.",
+            "Address Resolution: Reverse geocoding resolves grid coordinates into full, readable street addresses.",
+            "Enlarged Map View: Inspect specific locations in full-screen detail directly from the list view.",
+            "Full Location Context: Removed character limits from addresses allowing complete visibility."
+        ]
+    },
+    {
+        "version": "1.5.0",
+        "date": "2026-02-27",
+        "title": "Timeline, History & One-Click Update",
+        "changes": [
+            "Scan Timeline: View and switch between previous scan runs without losing history.",
+            "Run History: Re-runs no longer delete old results — each run gets a unique ID.",
+            "Scheduled Scan Info: Header now shows next run date/time and frequency badge.",
+            "Cancel Schedule: One-click button to stop a recurring scan from auto-running.",
+            "One-Click App Update: Update the app from GitHub directly from the update banner.",
+            "Fixed Update Notifier always showing — version is now read dynamically from package.json.",
+            "Fixed map auto-panning when clicking a pin — view stays perfectly still."
+        ]
+    },
+    {
+        "version": "1.4.0",
+        "date": "2026-02-26",
+        "title": "Scanner Accuracy & CID Matching",
+        "changes": [
+            "Fixed critical bug: PlaceId was never saved to the database.",
+            "CID-first business matching: match by CID > PlaceID > strict name.",
+            "Removed 80% token-overlap name matching that caused false positives.",
+            "Numbered rank markers on map (1-20 or X for not found).",
+            "Geographically accurate zip code lookups (bounding-box first)."
+        ]
+    },
+    {
+        "version": "1.3.0",
+        "date": "2026-02-12",
+        "title": "Review Intel & Deep Scraping",
+        "changes": [
+            "Source attribution for every AI insight.",
+            "Deep scraping for businesses with 1700+ reviews.",
+            "CSV export for all review data.",
+            "Fixed 'Zero Reviews' bug and duplicate review deduplication."
+        ]
+    },
+    {
+        "version": "1.2.0",
+        "date": "2026-02-02",
+        "title": "Global Precision Update",
+        "changes": [
+            "Precision Business Identity: Auto-populate and URL-based imports.",
+            "Regional Localization: Dynamic locale/timezone adaptation per scan.",
+            "Fail-Safe Scans: Automatic proxy blacklisting and direct fallback.",
+            "Enhanced AI-Insights: Primary threat identification and market share analysis.",
+            "Telemetry Console: Integrated system logs in Settings."
+        ]
+    },
+    {
+        "version": "1.1.0",
+        "date": "2026-01-30",
+        "title": "Stability Patch",
+        "changes": [
+            "Fixed coordinate validation for equator/prime meridian points.",
+            "Improved scraper scrolling performance.",
+            "Added system-wide logging utility."
+        ]
+    }
+]

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SEO Bunny</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #fdfbf7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #211b14;
+      -webkit-app-region: drag;
+    }
+    .container {
+      text-align: center;
+    }
+    .icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #fdeee6 0%, #f9dacb 100%);
+      border: 1px solid #efb89e;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      box-shadow: 0 4px 12px -2px rgba(194, 84, 48, 0.22);
+    }
+    .icon svg {
+      width: 32px;
+      height: 32px;
+      fill: none;
+      stroke: #a24123;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    h1 {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      color: #211b14;
+    }
+    .subtitle {
+      font-size: 11px;
+      color: #a24123;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .status {
+      font-size: 13px;
+      color: #7c6d5a;
+      margin-bottom: 22px;
+    }
+    .loader {
+      width: 120px;
+      height: 3px;
+      background: #e8dfd1;
+      border-radius: 3px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .loader-bar {
+      width: 40%;
+      height: 100%;
+      background: #c25430;
+      border-radius: 3px;
+      animation: slide 1.2s ease-in-out infinite;
+    }
+    @keyframes slide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(350%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M13 16a3 3 0 0 1 2.24 5"/>
+        <path d="M18 12h.01"/>
+        <path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3"/>
+        <path d="M20 8.54V4a2 2 0 1 0-4 0v3"/>
+        <path d="M7.612 12.524a3 3 0 1 0-1.6 4.3"/>
+      </svg>
+    </div>
+    <h1>SEO Bunny</h1>
+    <p class="subtitle">Crafted by Mal</p>
+    <p class="status" id="status">Starting up...</p>
+    <div class="loader">
+      <div class="loader-bar"></div>
+    </div>
+  </div>
+</body>
+</html>

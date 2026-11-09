@@ -1,0 +1,126 @@
+name: Build Desktop App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+          - os: windows-latest
+            platform: win
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      NODE_OPTIONS: '--max-old-space-size=4096'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Python setuptools (macOS)
+        if: runner.os == 'macOS'
+        run: pip3 install setuptools --break-system-packages || pip3 install setuptools || true
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Create database for build
+        run: |
+          node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'DATABASE_URL=file:' + require('path').join(process.env.RUNNER_TEMP, 'seo-bunny-build.db').replaceAll('\\','/') + '\n')"
+
+      - name: Initialize disposable build database
+        run: npm run setup:ci
+
+      - name: Run tests and public source preflight
+        run: npm test && npm run check:public
+
+      - name: Build Next.js
+        run: npx next build
+        env:
+          GEORANKER_IS_ELECTRON: '1'
+          SEO_BUNNY_DISABLE_BACKGROUND: '1'
+
+      - name: Verify standalone output exists
+        run: |
+          node -e "const fs=require('fs'); if(!fs.existsSync('.next/standalone/server.js')){console.error('ERROR: standalone server.js missing - Next.js build did not produce standalone output');process.exit(1);} console.log('Standalone output verified.');"
+
+      - name: Copy static assets
+        run: node scripts/copy-static.js
+
+      - name: Compile Electron TypeScript
+        run: npm run electron:compile
+
+      # Guards the packaging/wiring bugs behind issues #6-#26: missing splash
+      # asset, CSP-blocked map tiles, npx-based browser install, stale browser
+      # path table. These only break in the installed app, never in dev.
+      - name: Verify build invariants
+        run: npm run verify
+
+      - name: Create empty data/postal directory
+        run: node -e "require('fs').mkdirSync('data/postal',{recursive:true})"
+
+      - name: Build Electron app (macOS)
+        if: matrix.platform == 'mac'
+        run: npx electron-builder --mac --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Ad-hoc sign with "-" identity — no Apple account needed.
+          # Prevents "app is damaged" Gatekeeper error on macOS 13+.
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Build Electron app (Windows)
+        if: matrix.platform == 'win'
+        run: npx electron-builder --win --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-release:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - name: Update release notes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const tag = context.ref.replace('refs/tags/', '');
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 20,
+            });
+            // listReleases returns both published and draft releases for authenticated requests
+            const release = releases.find(r => r.tag_name === tag);
+            if (release) {
+              await github.rest.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.id,
+                draft: false,
+                body: `## Download\n\n| Platform | Download |\n|----------|----------|\n| macOS | [Download DMG](https://github.com/${context.repo.owner}/${context.repo.repo}/releases/download/${tag}/SEO-Bunny-${tag.replace('v','')}.dmg) |\n| Windows | [Download Installer](https://github.com/${context.repo.owner}/${context.repo.repo}/releases/download/${tag}/SEO-Bunny-Setup-${tag.replace('v','')}.exe) |\n\n---\n\n${release.body || ''}`,
+              });
+            } else {
+              core.warning(`No release found for tag ${tag} — it may still be uploading. Check GitHub Releases.`);
+            }

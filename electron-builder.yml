@@ -1,0 +1,162 @@
+appId: com.mal.seobunny
+productName: SEO Bunny
+
+directories:
+  output: dist-electron
+  buildResources: build-resources
+
+# The main process uses Electron's built-in SQLite; no native rebuild is needed.
+npmRebuild: false
+
+# Only Electron main-process files + exact dependencies
+files:
+  - "package.json"
+  - "electron/dist/**"
+  - "electron/splash.html"
+  - "!node_modules/**"
+  # playwright-core: bundled so the app can download its own browser without
+  # requiring Node/npx on the user's machine, and so the browser revision
+  # always matches the one the scanner looks for. Unpacked below — a child
+  # process cannot execute cli.js from inside the asar archive.
+  - "node_modules/playwright-core/**"
+  # electron-updater and its transitive dependencies
+  - "node_modules/argparse/**"
+  - "node_modules/base64-js/**"
+  - "node_modules/bindings/**"
+  - "node_modules/bl/**"
+  - "node_modules/buffer/**"
+  - "node_modules/builder-util-runtime/**"
+  - "node_modules/chownr/**"
+  - "node_modules/debug/**"
+  - "node_modules/decompress-response/**"
+  - "node_modules/deep-extend/**"
+  - "node_modules/detect-libc/**"
+  - "node_modules/electron-updater/**"
+  - "node_modules/end-of-stream/**"
+  - "node_modules/expand-template/**"
+  - "node_modules/file-uri-to-path/**"
+  - "node_modules/fs-constants/**"
+  - "node_modules/fs-extra/**"
+  - "node_modules/github-from-package/**"
+  - "node_modules/graceful-fs/**"
+  - "node_modules/ieee754/**"
+  - "node_modules/inherits/**"
+  - "node_modules/ini/**"
+  - "node_modules/js-yaml/**"
+  - "node_modules/jsonfile/**"
+  - "node_modules/lazy-val/**"
+  - "node_modules/lodash.escaperegexp/**"
+  - "node_modules/lodash.isequal/**"
+  - "node_modules/mimic-response/**"
+  - "node_modules/minimist/**"
+  - "node_modules/mkdirp-classic/**"
+  - "node_modules/ms/**"
+  - "node_modules/napi-build-utils/**"
+  - "node_modules/node-abi/**"
+  - "node_modules/once/**"
+  - "node_modules/prebuild-install/**"
+  - "node_modules/pump/**"
+  - "node_modules/rc/**"
+  - "node_modules/readable-stream/**"
+  - "node_modules/safe-buffer/**"
+  - "node_modules/sax/**"
+  - "node_modules/semver/**"
+  - "node_modules/simple-concat/**"
+  - "node_modules/simple-get/**"
+  - "node_modules/string_decoder/**"
+  - "node_modules/strip-json-comments/**"
+  - "node_modules/tar-fs/**"
+  - "node_modules/tar-stream/**"
+  - "node_modules/tiny-typed-emitter/**"
+  - "node_modules/tunnel-agent/**"
+  - "node_modules/universalify/**"
+  - "node_modules/util-deprecate/**"
+  - "node_modules/wrappy/**"
+  - "!**/*.map"
+  - "!**/*.d.ts"
+  - "!**/*.d.mts"
+
+# Next.js standalone lives on real filesystem (not in asar)
+extraResources:
+  - from: ".next/standalone"
+    to: "standalone"
+    filter:
+      - "**/*"
+      - "!.env*"
+      - "!**/*.db"
+      - "!**/*.db-*"
+      - "!**/*.sqlite*"
+      - "!.local-backups/**"
+      - "!.rea/**"
+      - "!artifacts/**"
+      - "!data/**"
+      - "!pleper_chrome_extension/**"
+      - "!electron/**"
+      - "!response.json"
+      - "!tsconfig.json"
+      - "!node_modules/playwright/**"
+      - "!node_modules/electron/**"
+      - "!node_modules/electron-builder/**"
+      - "!node_modules/@electron/**"
+      - "!node_modules/typescript/**"
+      - "!node_modules/prisma/**"
+      - "!node_modules/@next/swc-linux-*/**"
+      - "!node_modules/@next/swc-win32-*/**"
+      - "!node_modules/@next/swc-darwin-*/**"
+  # electron-builder skips a root directory named node_modules in generic copies.
+  # Map its contents separately so the standalone server can resolve Next/Prisma.
+  - from: ".next/standalone/node_modules"
+    to: "standalone/node_modules"
+    filter:
+      - "**/*"
+      - "!playwright/**"
+      - "!electron/**"
+      - "!electron-builder/**"
+      - "!@electron/**"
+      - "!typescript/**"
+      - "!prisma/**"
+      - "!@next/swc-linux-*/**"
+      - "!@next/swc-win32-*/**"
+      - "!@next/swc-darwin-*/**"
+  - from: "data/postal"
+    to: "data/postal"
+    filter:
+      - "**/*.json"
+  - from: "prisma/schema.prisma"
+    to: "prisma/schema.prisma"
+
+asar: true
+asarUnpack:
+  - "node_modules/playwright-core/**"
+
+afterSign: scripts/after-sign.js
+
+mac:
+  category: public.app-categories.business
+  target:
+    - target: dmg
+  # Skip certificate-based signing (no Apple account).
+  # Ad-hoc signing is applied via the afterSign hook above.
+  identity: null
+  artifactName: "SEO-Bunny-${version}.${ext}"
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  oneClick: true
+  perMachine: false
+  allowToChangeInstallationDirectory: false
+  deleteAppDataOnUninstall: false
+  runAfterFinish: true
+  artifactName: "SEO-Bunny-Setup-${version}.${ext}"
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  category: Office

@@ -1,0 +1,21 @@
+{
+    "name": "SEO Bunny",
+    "short_name": "SEO Bunny",
+    "description": "SEO Bunny by Mal — Local SEO & Map Rank Intelligence",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fdfbf7",
+    "theme_color": "#c25430",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

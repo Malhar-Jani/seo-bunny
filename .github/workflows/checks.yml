@@ -1,0 +1,28 @@
+name: Source checks
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'DATABASE_URL=file:' + require('path').join(process.env.RUNNER_TEMP, 'seo-bunny-ci.db').replaceAll('\\','/') + '\nSEO_BUNNY_DISABLE_BACKGROUND=1\n')"
+      - run: npm run setup:ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run check:public
+      - run: npm run build
+      - run: npm run electron:compile
+      - run: node scripts/verify-build.js

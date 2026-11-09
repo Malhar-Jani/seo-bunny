@@ -1,0 +1,332 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin-arm64", "darwin", "windows", "linux-musl", "debian-openssl-3.0.x"]
+}
+
+model Scan {
+  id          String      @id @default(cuid())
+  keyword     String
+  createdAt   DateTime    @default(now())
+  status      String      @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  centerLat   Float
+  centerLng   Float
+  radius      Float
+  gridSize    Int         @default(3) // e.g., 3x3, 5x5
+  shape       String      @default("SQUARE") // SQUARE, CIRCLE, ZIP
+  customPoints String?     // Optional JSON string of manual coordinates
+  frequency   String      @default("ONCE") // ONCE, DAILY, WEEKLY
+  nextRun     DateTime?
+  businessName String?     // Name of business to track ranking for (optional)
+  savedBusinessId String?
+  placeId     String?     // Google Place ID for accurate tracking
+  currentRunId String?    // ID of the current/latest run (for timeline grouping)
+  results     Result[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([nextRun])
+}
+
+model Result {
+  id           String   @id @default(cuid())
+  scanId       String
+  scan         Scan     @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  runId        String?  // Groups results by scan execution (null for legacy results)
+  runAt        DateTime @default(now())  // When this run started
+  lat          Float
+  lng          Float
+  rank         Int?     // Rank of the target business (null if not found)
+  targetName   String?  // Target business name to track
+  placeId      String?  // Google Place ID of the result (found business)
+  cid          String?  // Google CID of the result
+  captureStatus String @default("UNKNOWN") // CHECKED, FAILED, UNKNOWN (legacy)
+  captureError String?
+  topResults   String   // List of top 20 businesses found at this point (JSON string)
+  capturedAt   DateTime @default(now())
+
+  @@index([scanId])
+  @@index([scanId, runId])
+}
+
+model Proxy {
+  id           String   @id @default(cuid())
+  host         String
+  port         Int
+  username     String?
+  password     String?
+  type         String   @default("RESIDENTIAL") // RESIDENTIAL, DATACENTER
+  enabled      Boolean  @default(true)
+  status       String   @default("UNTESTED") // UNTESTED, ACTIVE, DEAD
+  lastTestedAt DateTime?
+  createdAt    DateTime @default(now())
+
+  @@unique([host, port])
+}
+
+model Alert {
+  id        String   @id @default(cuid())
+  type      String   // RANK_UP, RANK_DOWN, SCAN_ERROR
+  message   String
+  scanId    String
+  createdAt DateTime @default(now())
+  read      Boolean  @default(false)
+
+  @@index([read])
+  @@index([scanId])
+}
+
+model GlobalSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     String   @default("INFO") // INFO, WARN, ERROR, DEBUG
+  message   String
+  source    String?  // e.g., "SCANNER", "PROXY_FETCHER", "API"
+  details   String?  // JSON string for extra data
+  createdAt DateTime @default(now())
+}
+
+model Webhook {
+  id        String   @id @default(cuid())
+  url       String
+  events    String   // JSON array: ["SCAN_COMPLETE","RANK_CHANGE","SCAN_FAILED"]
+  secret    String?  // Optional HMAC-SHA256 signing secret
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([enabled])
+}
+
+model GridPreset {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  centerLat   Float
+  centerLng   Float
+  radius      Float
+  gridSize    Int      @default(3)
+  shape       String   @default("SQUARE")
+  customPoints String? // JSON string of manual coordinates
+  locationName String? // Human-readable location label
+  createdAt   DateTime @default(now())
+
+  @@index([name])
+}
+
+model SavedBusiness {
+  id           String   @id @default(cuid())
+  name         String
+  placeId      String?  // Google Place ID or CID
+  address      String?
+  phone        String?
+  website      String?
+  category     String?
+  googleUrl    String?  // Google Maps URL
+  lat          Float?
+  lng          Float?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  googleLink   GoogleBusinessLink?
+  posts        BusinessPost[]
+  replyDrafts  ReplyDraft[]
+  contacts     BusinessContact[]
+  reviewCache  GoogleReviewCache?
+
+  @@index([name])
+}
+
+// Credentials and temporary Google data are deliberately excluded from workspace backups.
+model GoogleCredential {
+  id String @id @default("local")
+  clientId String
+  secretEncrypted String
+  updatedAt DateTime @updatedAt
+}
+
+model GoogleConnection {
+  id String @id @default("local")
+  clientId String
+  subject String
+  email String
+  refreshEncrypted String
+  accessEncrypted String
+  expiresAt DateTime
+  scopes String
+  connectedAt DateTime @default(now())
+}
+
+model GoogleOAuthAttempt {
+  id String @id
+  browserHash String
+  verifierEncrypted String
+  nonce String
+  clientId String
+  credentialVersion String
+  expiresAt DateTime
+  @@index([expiresAt])
+}
+
+model GoogleBusinessLink {
+  id String @id @default(cuid())
+  businessId String @unique
+  business SavedBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  subject String
+  accountName String
+  locationName String
+  profileEncrypted String?
+  profileExpiresAt DateTime?
+  updatedAt DateTime @updatedAt
+  @@unique([subject, locationName])
+}
+
+// User-authored work is backed up; temporary Google review content is not.
+model BusinessPost {
+  id String @id @default(cuid())
+  businessId String
+  business SavedBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  title String
+  summary String
+  actionType String @default("NONE")
+  actionUrl String?
+  imageUrl String?
+  status String @default("DRAFT")
+  scheduledAt DateTime?
+  approvedAt DateTime?
+  approvedSubject String?
+  targetLocation String?
+  googleName String?
+  error String?
+  publishedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([businessId, createdAt])
+  @@index([status, scheduledAt])
+}
+
+model ReplyDraft {
+  id String @id @default(cuid())
+  businessId String
+  business SavedBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  reviewKey String
+  source String
+  comment String
+  status String @default("DRAFT")
+  error String?
+  publishedAt DateTime?
+  updatedAt DateTime @updatedAt
+  @@unique([businessId, reviewKey])
+}
+
+model GoogleReviewCache {
+  businessId String @id
+  business SavedBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  subject String
+  locationName String
+  contentEncrypted String
+  expiresAt DateTime
+  syncedAt DateTime @default(now())
+}
+
+model BusinessContact {
+  id String @id @default(cuid())
+  businessId String
+  business SavedBusiness @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name String
+  phone String?
+  email String?
+  notes String?
+  permission Boolean @default(false)
+  stage String @default("NEW")
+  createdAt DateTime @default(now())
+  @@index([businessId, createdAt])
+}
+
+model ReviewAnalysis {
+  id            String   @id @default(cuid())
+  businessName  String
+  businessUrl   String
+  savedBusinessId String?
+  collectedReviews Int @default(0)
+  collectionComplete Boolean?
+  languageCoverage Float?
+  placeId       String?
+  totalReviews  Int      @default(0)
+  averageRating Float    @default(0)
+  analysisData  String?  // Full JSON blob of 100+ metrics
+  status        String   @default("PENDING") // PENDING, SCRAPING, ANALYZING, COMPLETED, FAILED
+  error         String?
+  currentRunId  String?  // ID of the current/latest run (for history)
+  createdAt     DateTime @default(now())
+  reviews       Review[]
+  job           ReviewJob?
+  runs          ReviewRun[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ReviewJob {
+  id String @id @default(cuid())
+  analysisId String @unique
+  analysis ReviewAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  status String @default("QUEUED")
+  stage String @default("Waiting to start")
+  logs String @default("[]")
+  cancelRequested Boolean @default(false)
+  startedAt DateTime?
+  finishedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([status])
+}
+
+model ReviewRun {
+  id String @id
+  analysisId String
+  analysis ReviewAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  businessName String
+  averageRating Float
+  totalReviews Int
+  collectedReviews Int
+  collectionComplete Boolean
+  languageCoverage Float
+  analysisData String
+  createdAt DateTime @default(now())
+  @@index([analysisId])
+}
+
+model Review {
+  id              String   @id @default(cuid())
+  analysisId      String
+  analysis        ReviewAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  runId           String?  // Groups reviews by analysis run (null for legacy)
+  runAt           DateTime @default(now()) // When this run was executed
+  reviewerName    String
+  reviewerUrl     String?
+  reviewImage     String?
+  reviewCount     Int?
+  photoCount      Int?
+  rating          Int
+  text            String?
+  publishedDate   String?
+  responseText    String?
+  responseDate    String?
+  sentimentScore  Float?
+  sentimentLabel  String?
+  isLikelyFake    Boolean  @default(false)
+  fakeScore       Float?
+  analysisBlob    String?
+
+  @@index([analysisId])
+  @@index([analysisId, runId])
+}
