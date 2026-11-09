@@ -14,7 +14,7 @@ an overview of recent results and unchecked locations, and mobile checkpoint
 inspection. Failed map tiles show a recoverable error while keeping ranking data
 available. The interface uses a consistent cream and terracotta theme.
 
-![Fictional rank-map demo](docs/screenshots/demo-map.png)
+![Map-first rank heatmap and checkpoint inspection](docs/screenshots/demo-map.png)
 
 ## Try it
 
@@ -42,6 +42,42 @@ background work. It uses a temporary SQLite file rather than your database.
 For production mode, run `npm run build`, then double-click **Start SEO Bunny.cmd**
 on Windows. The old launcher remains as a compatibility shortcut.
 
+---
+
+## Workspace Tour
+
+### 1. Rank Tracker — Geo-Grid Scans Across Your Market
+
+Manage and filter every keyword scan across your saved businesses. Each run records its grid configuration (such as a `5×5` grid across a `2 km` radius), target coordinates, and completion status, with one-click access to detailed heatmaps, re-runs, and bulk exports.
+
+![Rank Tracker — keyword scans, grid configurations, and status filters](docs/screenshots/rank-tracker.png)
+
+### 2. Historical Reports & Verified Coverage
+
+Scope reports to a specific client business using the top workspace selector. Reports track verified checkpoint coverage (e.g., `24/25 checked`) separately from unverified or failed points so incomplete captures never distort your Top-3 visibility percentage, and let you export clean, shareable rank reports directly.
+
+![Reports — business-scoped historical ranking intelligence and Top-3 visibility](docs/screenshots/reports.png)
+
+### 3. Client Growth Studio & Review Inbox
+
+Each saved business has a dedicated **Client growth** workspace combining a **Review inbox**, **Posts & calendar**, local **Review QR** generator, **Profile checks**, and **Contacts**. You can draft replies, prepare Google Business Profile updates, generate print-ready SVG review QR cards, and—once a Google manager account is connected—sync official reviews and publish approved replies.
+
+![Client Growth — review inbox, post studio, QR cards, profile checks, and contacts](docs/screenshots/client-growth.png)
+
+### 4. Review Themes & Sentiment Analysis
+
+Inspect customer feedback themes, rating distributions, and English sentiment analysis across collected review snapshots, while keeping unsupported scripts explicitly marked as unassessed rather than guessing sentiment from star ratings.
+
+![Review themes and authored customer feedback examples](docs/screenshots/demo-reviews.png)
+
+### 5. Workspace Preferences, Backups & Google Connection
+
+Configure your operator display name, automatic checkpoint retry behavior, proxy routing, and Google Business Profile OAuth credentials. Settings also provides two distinct export modes: a **private workspace backup** (for full local recovery) and a **shareable rank report** that automatically strips credentials, customer contacts, notes, and review text.
+
+![Settings — Google Business Profile connection, private backups, and scan defaults](docs/screenshots/settings.png)
+
+---
+
 ## What it does
 
 - **Maps rank grids:** square, circular, neighborhood and postal grids, with
@@ -59,8 +95,6 @@ on Windows. The old launcher remains as a compatibility shortcut.
 - **Private backups and separate shareable reports:** workspace backups retain
   private data; the rank-report export excludes credentials, customer contacts,
   notes, settings, and review text.
-
-![Fictional review examples](docs/screenshots/demo-reviews.png)
 
 ## First scan
 
