@@ -45,9 +45,8 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Create database for build
-        run: |
-          node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'DATABASE_URL=file:' + require('path').join(process.env.RUNNER_TEMP, 'seo-bunny-build.db').replaceAll('\\','/') + '\n')"
+      - name: Configure disposable build database
+        run: node scripts/ci-environment.cjs
 
       - name: Initialize disposable build database
         run: npm run setup:ci
@@ -124,3 +123,4 @@ jobs:
             } else {
               core.warning(`No release found for tag ${tag} — it may still be uploading. Check GitHub Releases.`);
             }
+

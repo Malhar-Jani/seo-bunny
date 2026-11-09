@@ -18,7 +18,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: node -e "require('fs').appendFileSync(process.env.GITHUB_ENV, 'DATABASE_URL=file:' + require('path').join(process.env.RUNNER_TEMP, 'seo-bunny-ci.db').replaceAll('\\','/') + '\nSEO_BUNNY_DISABLE_BACKGROUND=1\n')"
+      - run: node scripts/ci-environment.cjs
       - run: npm run setup:ci
       - run: npm test
       - run: npm run typecheck
